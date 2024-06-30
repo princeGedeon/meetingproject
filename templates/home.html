@@ -1,300 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-
 {% block content %}
 <main class="page-main">
-                <div class="uk-grid" data-uk-grid>
-
-                    <div class="uk-width-3-3@l uk-width-3-3@m uk-width-3-3@s">
-                        <h3 class="uk-text-lead">Actualités</h3>
-                        <div class="js-recommend">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="recommend-slide">
-                                            <div class="tour-slide__box">
-                                                <a href=""><img src="{% static 'assets/img/event-1-1-3.jpg'%}" alt="banner"></a>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <!--div class="swiper-slide">
-                                        <div class="recommend-slide">
-                                            <div class="tour-slide__box">
-                                                <a href=""><img src="assets/img/event-1-1-3.jpg" alt="banner"></a>
-
-
-                                            </div>
-                                        </div>
-                                    </div-->
-
-
-                                    <!--div class="swiper-slide">
-                                        <div class="recommend-slide">
-                                            <div class="tour-slide__box">
-                                                <a href=""><img src="assets/img/event-1-1-3.jpg" alt="banner"></a>
-
-                                            </div>
-                                        </div>
-                                    </div-->
-
-
-                                    <!--div class="swiper-slide">
-                                        <div class="recommend-slide">
-                                            <div class="tour-slide__box">
-                                                <a href=""><img src="assets/img/event-1-1-3.jpg" alt="banner"></a>
-
-
-                                            </div>
-                                        </div>
-                                    </div-->
-
-
-
-
-
-
-
+    <div class="uk-grid" data-uk-grid>
+        <div class="uk-width-1-1">
+            <h3 class="uk-text-lead">Actualités</h3>
+            <div class="js-recommend">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        {% if latest_meet %}
+                        <div class="swiper-slide">
+                            <div class="recommend-slide">
+                                <div class="tour-slide__box">
+                                    <a href="{% url 'meet_detail' latest_meet.pk %}">
+                                        {% if latest_meet.image %}
+                                            <img src="{{ latest_meet.image.url }}" alt="{{ latest_meet.name }}">
+                                        {% else %}
+                                            <img src="{% static 'assets/img/default-image.jpg' %}" alt="Default Image">
+                                        {% endif %}
+                                    </a>
                                 </div>
-                                <div class="swipper-nav">
-                                    <div class="swiper-button-prev"></div>
-                                    <div class="swiper-button-next"></div>
-                                </div>
-                                <div class="swiper-pagination"></div>
                             </div>
                         </div>
+                        {% else %}
+                        <div class="swiper-slide">
+                            <p>No latest meeting found.</p>
+                        </div>
+                        {% endif %}
                     </div>
-                    <!--div class="uk-width-1-3@l uk-width-3-3@m uk-width-3-3@s">
-                        <h3 class="uk-text-lead">Trending Now</h3>
-                        <div class="js-trending">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="game-card --horizontal">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/trending2.jpg" alt="Alien Games" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Alien Games</a>
-                                                    <div class="game-card__genre">Warring factions have brought the Origin System to the brink of destruction.</div>
-                                                    <div class="game-card__rating-and-price">
-                                                        <div class="game-card__rating"><span>4.5</span><i class="ico_star"></i></div>
-                                                        <div class="game-card__price"><span>Free</span></div>
-                                                    </div>
-                                                    <div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="game-card --horizontal">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/trending3.jpg" alt="Warframe" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Alien Games</a>
-                                                    <div class="game-card__genre">Warring factions have brought the Origin System to the brink of destruction.</div>
-                                                    <div class="game-card__rating-and-price">
-                                                        <div class="game-card__rating"><span>3.9</span><i class="ico_star"></i></div>
-                                                        <div class="game-card__price"><span>Free</span></div>
-                                                    </div>
-                                                    <div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="game-card --horizontal">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/trending.jpg" alt="Warframe" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Alien Games</a>
-                                                    <div class="game-card__genre">Warring factions have brought the Origin System to the brink of destruction.</div>
-                                                    <div class="game-card__rating-and-price">
-                                                        <div class="game-card__rating"><span>4.2</span><i class="ico_star"></i></div>
-                                                        <div class="game-card__price"><span>$50</span></div>
-                                                    </div>
-                                                    <div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="swipper-nav">
-                                    <div class="swiper-button-prev"></div>
-                                    <div class="swiper-button-next"></div>
-                                </div>
-                                <div class="swiper-pagination"></div>
-                            </div>
-                        </div>
-                    </div-->
-                    <div class="uk-width-1-1">
-                        <h3 class="uk-text-lead">Session à Venir</h3>
-                        <div class="js-popular">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="game-card">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/june-session-1.jpg" alt="Solitary Crusade" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Session de Juin</a>
-
-
-                                                        <div class="game-card__rating"><span>+50 Participants</span></div>
-                                                        <div class="game-card__price"><span>  <i class="fa fa-calendar"></i> Début : 20 Avril 2024 </span></div>
-
-                                                    <!--div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                   <div class="swiper-slide">
-                                        <div class="game-card">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/july-session.jpg" alt="Solitary Crusade" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Session de Juillet</a>
-
-
-                                                        <div class="game-card__rating"><span>+50 Participants</span></div>
-                                                        <div class="game-card__price"><span>  <i class="fa fa-calendar"></i> Début : 20 Mai 2024 </span></div>
-
-                                                    <!--div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                   <div class="swiper-slide">
-                                        <div class="game-card">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/august-session.jpg" alt="Solitary Crusade" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Session de Août</a>
-
-
-                                                        <div class="game-card__rating"><span>+50 Participants</span></div>
-                                                        <div class="game-card__price"><span>  <i class="fa fa-calendar"></i> Début : 20 Juillet 2024 </span></div>
-
-                                                    <!--div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                   <div class="swiper-slide">
-                                        <div class="game-card">
-                                            <div class="game-card__box">
-                                                <div class="game-card__media"><a href="10_game-profile.html"><img src="assets/img/september-session.jpg" alt="Solitary Crusade" /></a></div>
-                                                <div class="game-card__info"><a class="game-card__title" href="10_game-profile.html"> Session de Septembrr</a>
-
-
-                                                        <div class="game-card__rating"><span>+50 Participants</span></div>
-                                                        <div class="game-card__price"><span>  <i class="fa fa-calendar"></i> Début : 20 Août 2024 </span></div>
-
-                                                    <!--div class="game-card__bottom">
-                                                        <div class="game-card__platform"><i class="ico_windows"></i><i class="ico_apple"></i></div>
-                                                        <div class="game-card__users">
-                                                            <ul class="users-list">
-                                                                <li><img src="assets/img/user-1.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-2.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-3.png" alt="user" /></li>
-                                                                <li><img src="assets/img/user-4.png" alt="user" /></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-                                </div>
-                                <div class="swiper-button-prev"></div>
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-pagination"></div>
-                            </div>
-
-
-                        </div>
-
-
-                         <button style="background-color: #3f53a1da; /* Couleur de fond verte */
-                                       color: white; /* Couleur du texte blanc */
-                                       padding: 10px 20px; /* Espacement intérieur du bouton */
-                                       border: none; /* Pas de bordure */
-                                       border-radius: 5px; /* Coins arrondis */
-                                       cursor: pointer; /* Curseur pointer au survol */
-                                       font-size: 16px; /* Taille de la police */
-                                       text-align: center; /* Centrer le texte */
-                                       text-decoration: none; /* Pas de soulignement */">
-                            Tout Voir
-                        </button>
-
+                    <div class="swipper-nav">
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
                     </div>
+                    <div class="swiper-pagination"></div>
                 </div>
-            </main>
-{% endblock  %}
+            </div>
+        </div>
+
+        <div class="uk-width-1-1">
+            <h3 class="uk-text-lead">Session à Venir</h3>
+            <form method="GET" class="filter-form">
+                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+                <select name="status">
+                    <option value="">All Statuses</option>
+                    <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
+                </select>
+                <select name="sort_by">
+                    <option value="start_datetime" {% if sort_by == 'start_datetime' %}selected{% endif %}>Start Date</option>
+                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
+                    <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status</option>
+                </select>
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="js-popular">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        {% for meet in meets %}
+                        <div class="swiper-slide">
+                            <div class="game-card">
+                                <div class="game-card__box">
+                                    <div class="game-card__media">
+                                        <a href="{% url 'meet_detail' meet.pk %}">
+                                            {% if meet.image %}
+                                                <img src="{{ meet.image.url }}" alt="{{ meet.name }}">
+                                            {% else %}
+                                                <img src="{% static 'assets/img/default-image.jpg' %}" alt="Default Image">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="game-card__info">
+                                        <a class="game-card__title" href="{% url 'meet_detail' meet.pk %}">{{ meet.name }}</a>
+                                        <div class="game-card__rating"><span>{{ meet.participants.count }} Participants</span></div>
+                                        <div class="game-card__price">
+                                            <span><i class="fa fa-calendar"></i> Début : {{ meet.start_datetime|date:"d M Y" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="swiper-slide">
+                            <p>No meetings found.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+
+            <a href="{% url 'all_meetings' %}" class="view-all-button" style="background-color: #3f53a1da; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-align: center; text-decoration: none;">
+                Tout Voir
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}
