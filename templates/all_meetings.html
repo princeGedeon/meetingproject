@@ -3,70 +3,62 @@
 
 {% block content %}
 <main class="page-main">
-    <div class="uk-container">
-        <h3 class="uk-text-lead">Toutes les Sessions</h3>
-        <form method="GET" class="filter-form uk-margin-bottom">
-            <div class="uk-grid-small" uk-grid>
-                <div class="uk-width-expand@s">
-                    <input class="uk-input" type="text" name="q" placeholder="Search..." value="{{ query }}">
-                </div>
-                <div class="uk-width-auto@s">
-                    <select class="uk-select" name="status">
-                        <option value="">All Statuses</option>
-                        <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
-                        <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
-                    </select>
-                </div>
-                <div class="uk-width-auto@s">
-                    <select class="uk-select" name="sort_by">
-                        <option value="start_datetime" {% if sort_by == 'start_datetime' %}selected{% endif %}>Start Date</option>
-                        <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
-                        <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status</option>
-                    </select>
-                </div>
-                <div class="uk-width-auto@s">
-                    <button class="uk-button uk-button-primary" type="submit">Search</button>
-                </div>
-            </div>
-        </form>
-
-        <div class="js-popular">
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    {% for meet in meets %}
-                    <div class="swiper-slide">
-                        <div class="game-card">
-                            <div class="game-card__box">
-                                <div class="game-card__media">
-                                    <a href="{% url 'meet_detail' meet.pk %}">
-                                        {% if meet.image %}
-                                            <img src="{{ meet.image.url }}" alt="{{ meet.name }}">
-                                        {% else %}
-                                            <img src="{% static 'assets/img/default-image.jpg' %}" alt="Default Image">
-                                        {% endif %}
-                                    </a>
-                                </div>
-                                <div class="game-card__info">
-                                    <a class="game-card__title" href="{% url 'meet_detail' meet.pk %}">{{ meet.name }}</a>
-                                    <div class="game-card__rating"><span>{{ meet.participants.count }} Participants</span></div>
-                                    <div class="game-card__price">
-                                        <span><i class="fa fa-calendar"></i> Début : {{ meet.start_datetime|date:"d M Y" }}</span>
-                                    </div>
-                                </div>
+    <div class="widget --filters">
+        <div class="widget__head">
+            <h3 class="uk-text-lead">Toutes les Sessions</h3>
+        </div>
+        <div class="widget__body">
+            <form method="GET">
+                <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-3@l uk-child-width-1-2@s uk-flex-middle uk-grid-small" data-uk-grid>
+                    <div class="uk-width-1-1">
+                        <div class="search">
+                            <div class="search__input">
+                                <i class="ico_search"></i>
+                                <input type="search" name="q" placeholder="Search" value="{{ query }}">
                             </div>
                         </div>
                     </div>
-                    {% empty %}
-                    <div class="swiper-slide">
-                        <p>No meetings found.</p>
+                    <div>
+                        <select class="js-select" name="sort_by">
+                            <option value="">Trier par : Défaut</option>
+                            <option value="session_debut" {% if sort_by == 'session_debut' %}selected{% endif %}>Début de session</option>
+                            <!-- Ajoutez d'autres options de tri ici -->
+                        </select>
                     </div>
-                    {% endfor %}
+                    <!-- Ajoutez ici le filtre pour l'état ou d'autres critères si nécessaire -->
+                    <div class="uk-text-right">
+                        <a href="#!">{{sessions|length}} Elements</a> <!-- Ajoutez ici le lien pour la pagination -->
+                    </div>
+                    <div>
+                        <button type="submit">Appliquer</button>
+                    </div>
                 </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-pagination"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="uk-grid uk-child-width-1-6@xl uk-child-width-1-4@l uk-child-width-1-3@s uk-flex-middle uk-grid-small" data-uk-grid>
+        {% for session in sessions %}
+        <div>
+            <div class="game-card">
+                <div class="game-card__box">
+                    <div class="game-card__media">
+                        <a href="{% url 'meet_detail_view' session.id %}"><img src="{{ session.image.url }}" alt="{{ session.nom }}" /></a>
+                    </div>
+                    <div class="game-card__info">
+                        <a class="game-card__title" href="{% url 'meet_detail_view' session.id %}">{{ session.nom }}</a>
+                        <div class="game-card__rating">
+                            <span>+{{ session.participants.count }} Participants</span>
+                        </div>
+                        <div class="game-card__price">
+                            <span><i class="fa fa-calendar"></i> Début : {{ session.session_debut }}</span>
+                        </div>
+                        <!-- Ajoutez ici d'autres détails de session si nécessaire -->
+                    </div>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
 </main>
 {% endblock %}

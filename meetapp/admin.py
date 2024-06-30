@@ -1,31 +1,49 @@
 from django.contrib import admin
-from .models import Meet, Participant
+from .models import Office, SecretaireSeance, Session, Participant, Reunion, CompteRendu
 
-@admin.register(Meet)
-class MeetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'start_datetime', 'status', 'date_created', 'date_updated')
-    list_filter = ('status', 'start_datetime')
-    search_fields = ('name', 'description')
-    readonly_fields = ('date_created', 'date_updated')
-    fieldsets = (
-        (None, {
-            'fields': ('name', 'description', 'image', 'start_datetime', 'status')
-        }),
-        ('Timestamps', {
-            'fields': ('date_created', 'date_updated')
-        }),
-    )
+# Office and SecretaireSeance Admins
+@admin.register(Office)
+class OfficeAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'description', 'localisation')
+    search_fields = ('nom', 'localisation')
+
+@admin.register(SecretaireSeance)
+class SecretaireSeanceAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'prenom', 'email', 'role', 'office')
+    search_fields = ('nom', 'prenom', 'email', 'role')
+    list_filter = ('office',)
+
+# Reunion and CompteRendu Admins
+class ParticipantInline(admin.TabularInline):
+    model = Reunion.participants.through
+    extra = 1
+
+@admin.register(Reunion)
+class ReunionAdmin(admin.ModelAdmin):
+    inlines = (ParticipantInline,)
+    list_display = ('jour', 'heure_debut', 'heure_fin', 'session', 'secretaire')
+    search_fields = ('jour', 'session__nom', 'secretaire__nom')
+    list_filter = ('jour', 'session', 'secretaire')
+    filter_horizontal = ('participants',)
+
+@admin.register(CompteRendu)
+class CompteRenduAdmin(admin.ModelAdmin):
+    list_display = ('reunion', 'compte_rendu')
+    search_fields = ('reunion__jour', 'compte_rendu')
+
+# Session and Participant Admins
+class ParticipantInline(admin.TabularInline):
+    model = Session.participants.through
+    extra = 1
+
+@admin.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    inlines = (ParticipantInline,)
+    list_display = ('nom', 'session_debut', 'session_fin')
+    search_fields = ('nom',)
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'date_registered')
-    search_fields = ('first_name', 'last_name', 'email', 'description')
-    readonly_fields = ('date_registered',)
-    fieldsets = (
-        (None, {
-            'fields': ('first_name', 'last_name', 'email', 'description', 'meets')
-        }),
-        ('Registration Date', {
-            'fields': ('date_registered',)
-        }),
-    )
+    inlines = (ParticipantInline,)
+    list_display = ('nom', 'prenom', 'email', 'role')
+    search_fields = ('nom', 'prenom', 'email')

@@ -7,291 +7,233 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-    <title>{{meet.name}}</title>
+    <title>{{ meet.nom }}</title>  <!-- Utilisation de meet.nom au lieu de meet.name -->
 
     <style>
-        body{
-             background-image: url(assets/img/bg/meeting-bg.jpg);
-             background-size: cover; /* ou "contain" pour ajuster la taille de l'image */
-            background-position: center; /* ou une autre position */
-            background-repeat: no-repeat; /* empêche la répétition de l'image */
+        body {
+            background-image: url(assets/img/bg/meeting-bg.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 20px;
         }
-        .meet-block{
-
-           background-color: #acc0e3e3;
+        .meet-block {
+            background-color: #acc0e3e3;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid white;
         }
-
-        .participants-item{
+        .participants-item {
             background-color: rgb(78, 79, 83);
             border-radius: 10px;
+            padding: 10px;
         }
-
         .talk-box {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-start;
-      height: 100vh;
-      padding: 20px;
-    }
-
-    .talk-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: rgb(78, 79, 83);
-      color: #fff;
-      font-size: 28px;
-      font-weight: bold;
-      text-align: center;
-      line-height: 30px;
-      display: flex;
-      align-items: center;
-      margin-right: 10px; /* Espacement entre le cercle et le message */
-    }
-
-    .talk-transcription {
-      font-size: 14px;
-      color: #000;
-      background-color: #dcf8c6;
-      border-radius: 10px;
-      padding: 10px 15px;
-    }
-
-    .start-recording{
-
-    }
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            height: 100vh;
+            padding: 20px;
+        }
+        .talk-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgb(78, 79, 83);
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 50px;
+            margin-right: 10px;
+        }
+        .talk-transcription {
+            font-size: 14px;
+            color: #000;
+            background-color: #dcf8c6;
+            border-radius: 10px;
+            padding: 10px 15px;
+        }
+        .start-recording {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            padding: 10px;
+        }
+        .btn-custom {
+            width: 48%;
+            margin-right: 4%;
+        }
     </style>
 </head>
 <body>
 
-       <div class="container" style="height: 700px;">
+<div class="container" style="height: 700px;">
+    <div class="row" style="height: 100%;">
+        <div class="col-md-8 meet-block">
+            <!-- Header -->
+            <div class="top-text d-flex">
+                <a href="{% url 'home' %}">
+                    <i class="fa fa-chevron-left fa-2x text-light" style="padding-top:7px;"></i>
+                </a>
+                <div class="meeting-name-block">
+                    <h2 class="text-center text-light">{{ meet.nom }}</h2>  <!-- Utilisation de meet.nom -->
+                </div>
+                <div class="text-end align-items-center d-flex">
+                    <span class="text-light badge bg-primary">
+                        {% if meet.participants.count > 0 %}
+                            {{ meet.participants.count }} Participants
+                        {% else %}
+                            Aucun participant
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
 
-        <div class="row" style="height:100%; width:100%">
-            <div class="col-md-8 meet-block" style="height:100%;  border-bottom-left-radius: 10px; border-top-left-radius: 10px; border-left: 2px white solid; padding:10px;">
-
-             <div class="top-text d-flex" style="width: 100%;">
-        <a href="{% url 'home'%}">
-            <i class="fa fa-chevron-left fa-2x text-light" style="padding-top:7px;"></i>
-        </a>
-        <div class="meeting-name-block" style="margin-left:auto; margin-right: auto; display:block; padding-top: 0px;">
-            <h2 class="text-center text-light" style="">{{ meet.name }}</h2>
-        </div>
-        <span class="text-end text-center align-items-center d-flex" style="padding:2px; background-color:#acc0e3; border-radius: 20px; width:150px; height: 50px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);">
-            <span class="text-light" style="font-weight:bold; margin-left:auto; margin-right: auto; display:block;">
-                {% if meet.participants.count > 0 %}
-                    {{ meet.participants.count }} Participants
-                {% else %}
-                    Aucun participant
-                {% endif %}
-            </span>
-        </span>
-    </div>
-
-    <div class="container-fluid participants" style="width:100% !important; margin-top:20px; padding:10px;">
-        <div class="row mx-2" style="width:100% !important; padding:0%;">
-            {% for participant in meet.participants.all %}
-            <div class="col-md-3 mb-4 participants-{{ forloop.counter }}" style="height:auto; padding-left:5px;">
-                <div class="participants-item" style="height: 200px;">
-                    <div class="avatar text-center align-items-center d-flex" style="height:80%;">
-                        <span style="color:white; font-size:60px; font-weight: bold; margin-left:auto; margin-right: auto; display: block;">
-                            {{ participant.first_name|slice:":1"|upper }}
-                        </span>
+            <!-- Participants -->
+            <div class="container-fluid participants mt-3">
+                <div class="row">
+                    {% for participant in meet.participants.all %}
+                    <div class="col-md-3 mb-4">
+                        <div class="participants-item">
+                            <div class="avatar text-center">
+                                <span class="text-light" style="font-size: 60px; font-weight: bold;">
+                                    {{ participant.first_name|slice:":1"|upper }}
+                                </span>
+                            </div>
+                            <div class="participant-name text-center">
+                                <span class="text-light" style="font-size: 24px;">{{ participant.first_name }}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="participant-name text-center" style="height:20%; width: 100%;">
-                        <span class="text-center text-light" style="font-size:24px; text-align: center;">
-                            {{ participant.first_name }}
-                        </span>
+                    {% empty %}
+                    <div class="col-md-12">
+                        <p class="text-center text-light">Aucun participant</p>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% empty %}
-            <div class="col-md-12">
-                <p class="text-center text-light">Aucun participant</p>
+
+            <!-- Recording and Transcription -->
+            <div class="start-recording mt-3">
+                <div class="text-center mb-3">
+                    <div class="bg-secondary rounded-circle text-center" style="width: 100px; height: 100px; cursor: pointer;">
+                        <i class="fa fa-microphone fa-2x text-light" aria-hidden="true" onclick="chooseFile()"></i>
+                        <input type="file" id="fileInput" style="display: none;" accept="audio/mpeg" onchange="displayFileName()">
+                    </div>
+                    <div id="fileNameDisplay" class="mt-2 font-weight-bold"></div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-success btn-custom" id="transcribe">
+                        <div class="spinner-border text-light" id="process-transcribe" style="display: none;"></div>
+                        <span id="text-transcribe">Transcrire</span>
+                    </button>
+                    <button class="btn text-light btn-custom" id="generate_compte_rendu">
+                        <div class="spinner-border text-light" id="process-generate" style="display: none;"></div>
+                        <span id="text-generate">Générer un Compte Rendu</span>
+                    </button>
+                </div>
             </div>
-            {% endfor %}
+        </div>
+
+        <!-- Transcriptions -->
+        <div class="col-md-4 text-light" style="background-color: #3f53a1da; padding: 10px;">
+            <h2 class="text-center">Meeting Transcriptions</h2>
+            <div class="transcriptions" style="overflow-y: scroll; height: calc(100% - 20px);">
+                <!-- Transcription items will be dynamically added here -->
+            </div>
         </div>
     </div>
+</div>
 
-                <div class="start-recording" style="width: 100% !important; margin-top: 20px; padding: 10px; height: 400px; justify-content: center; ">
-                    <div style="background-color: rgb(78, 79, 83); height: 100px; width: 100px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; margin-left: auto; margin-right: auto;  margin-top: 100px;" onclick="chooseFile()">
-                       <i class="fa fa-microphone fa-2x text-light" aria-hidden="true"></i>
-                       <input type="file" id="fileInput" style="display: none;" accept="audio/mpeg" onchange="displayFileName()">
-
-                    </div> 
-                    <div id="fileNameDisplay" style="text-align: center; margin-top: 10px; font-weight:bold; "></div>
-                    
-                </div>
-
-               
-
-
-
-                   <div style="width: 100%;;">
-                    <div style="width: 80%; margin-left:auto; margin-right: auto; display:block; background-color:#acc0e3; border-radius: 20px;border :2px white solid; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5); height: 60px; padding:5px;" class=" text-center d-flex" >  <button class="btn btn-success " id="transcribe" style="width: 48%; margin-right:4%;"> <div class="spinner-border text-light" id="process-transcribe" style="display: none;"></div>  <span id="text-transcribe">  Transcrire </span> </button>  <button class="btn text-light" id="generate_compte_rendu" style="width: 48%; background-color: rgb(78, 79, 83);"> <div class="spinner-border text-light" id="process-generate" style="display: none;"></div>  <span id="text-generate"> Générer un Compte Rendu </span> </button>   </div>
-                   </div>
-                 
-
-                     
-            </div>
-
-
-            <div class="col-md-4 " style="height:100%; background-color: #3f53a1da; padding:10px;">
-                <h2 class="text-center text-light" style="height: 10%;">Meeting Transcriptions</h2>
-
-                <div class="transcriptions text-light" style="overflow-y: scroll; height: 90%; padding :5px;">
-
-                      <textarea id="transcription-to-process" style="display: none;"></textarea>
-
-                      <!--div class="talk-box">
-                        <div class="talk-avatar">D</div>
-                        <div class="talk-transcription">Salut tout le monde</div>
-                      </div-->
-
-                      <b class="text-dark">[spk_0] : </b> dans le cadre d'un entretien à prendre dans le cadre de l'étude de marché visant à renforcer la stratégie marketing de la course Je vais m'impressionner avec vous Cinq thématiques Je vous présente d'abord les thématiques La première thématique est liée à l'évolution du marché des produits et services de la France La deuxième thématique est liée à la compétitivité des produits et services de pouce La troisième thématique est liée aux opportunités de croissance des produits de la course La quatrième thématique est liée au futur marché de la hausse des produits de la Poste et la dernière thématique est liée à la force de vente de La course concerne plus de seize cinq enfants que nous allons Vous entretenez comme je l'ai dit à l'entame La première thématique est liée à l'évolution du marché des produits et services postaux Alors comment voyez vous l'évolution des produits de la Poste tels que le courrier ordinaire le courrier express le transport le compte courant le compte épargne ADB zag donc chaque produit Est ce que vous estimez que c'est bon Ce n'est pas bon Et ensuite quels sont les facteurs qui sont à la base de ces <br> <br>
-
-                     <b class="text-dark"> [spk_1] : </b> Au fait sans vous mentir par le passé ça n'était pas comme ça à l'âge de l'amus de la de la directive générale Elle a bossé les choses sur tous les plans sur tous les plans sur tous les pagnons le courrier également Vous allez constater si on envoie une lettre dans le cas du courrier si on envoie un dépose une lettre à côté nous c'est toujours J un pour rentrer par exemple sur Boy un peu partout Vous voyez Donc c'est un dynamisme vraiment ça vous manque C'est une dynamisme de la part et de direct direct générale c'est surtout les plats l'impact également à DB zida la peau est présente partout donc s'augmenter ça va ça va<br> <br>
-
-                       <b class="text-dark">[spk_0] : </b> Donc ce qui fait que c'est comme ça c'est le dynamisme de la DG <br> <br> 
-
-                     <b class="text-dark"> [spk_1] : </b> Oui oui d'accord d'accord d'accord OK donc pour <br> <br>
-
-                     <b class="text-dark">[spk_0] : </b> finir cette thématique est ce que vous voyez que d'ici un an ou deux ans avec ces efforts qui sont fournis est ce que la croissance sera maintenue Ou bien il faut pouvoir agir encore pour rebooster davantage
-
-                </div>
-            </div>
-        </div>
-              
-       </div>
-    
-
-<!-- Inclusion du CDN Bootstrap JavaScript (jQuery requis) -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
- 
-
-  
-
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
- 
- 
-
-  // Function to choose file
-  function chooseFile() {
-    document.getElementById('fileInput').click();
-  }
-
-  // Function to display selected file name
-  function displayFileName() {
-    const fileName = document.getElementById('fileInput').files[0].name;
-    document.getElementById('fileNameDisplay').innerText = fileName;
-  }
-
-   var job_name="";
-
-   $("#transcribe").click(function(){
-     $("#process-transcribe").show();
-     $("#text-transcribe").hide();
-        // Create FormData object
-    var formData = new FormData();
-    // Append file to FormData
-    formData.append('audio_file', $('#fileInput')[0].files[0]);
-
-    // Send audio file to Django server for transcription
-    $.ajax({
-      type: 'POST',
-      url: 'your_django_endpoint_url',
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(response) {
-        // Display the name of the job launched
-        alert('Job Name: ' + response.job_name);
-        job_name=response.job_name;
-      },
-      error: function(xhr, status, error) {
-        console.error(xhr.responseText);
-      }
-      
-    });
-
-     $("#process-transcribe").hide();
-       $("#text-transcribe").show();
-
-    
-   });
-
-
-
-   function checkTranscribeStatusAndFetchTranscription(jobName) {
-    // Fonction récursive pour vérifier le statut et récupérer la transcription
-    function checkStatus() {
-        // Effectuer une requête Ajax vers un fichier Django pour vérifier le statut du job
-        $.ajax({
-            url: '/chemin/vers/votre/vue/django/pour/verifier/statut/job/',
-            type: 'POST',
-            data: { job_name: jobName },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'COMPLETED') {
-                    // Si le statut est COMPLETED, récupérer le résultat de la transcription
-                    var transcriptionResult = response.result;
-                    $(".transcriptions").html(transcriptionResult);
-                    $("#transcription-to-process").val(transcriptionResult);
-                    // Faire quelque chose avec le résultat (par exemple, afficher dans une interface utilisateur)
-                    //console.log("Résultat de la transcription:", transcriptionResult);
-                } else {
-                    // Si le statut n'est pas encore COMPLETED, vérifier à nouveau après un court délai
-                    setTimeout(checkStatus, 1000); // Vérifiez à nouveau après 1 seconde
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("Erreur lors de la vérification du statut:", error);
-                // Gérer l'erreur (par exemple, afficher un message d'erreur à l'utilisateur)
-            }
-        });
+    function chooseFile() {
+        document.getElementById('fileInput').click();
     }
 
-    // Démarrer la vérification initiale du statut
-    checkStatus();
-}
+    function displayFileName() {
+        const fileName = document.getElementById('fileInput').files[0].name;
+        document.getElementById('fileNameDisplay').innerText = fileName;
+    }
 
+    $("#transcribe").click(function() {
+        $("#process-transcribe").show();
+        $("#text-transcribe").hide();
 
-$("#generate_compte_rendu").click(function(){
-      $("#process-generate").show();
-      $("#text-generate").hide();
-      var text_to_generate_resume=$("#transcription-to-process").val();
+        var formData = new FormData();
+        formData.append('audio_file', $('#fileInput')[0].files[0]);
 
-       $.ajax({
-            url: '/chemin/vers/votre/vue/django/pour/generer/compte/rendu/',
+        $.ajax({
             type: 'POST',
-            data: { textToProcess: text_to_generate_resume },
-            dataType: 'json',
+            url: '/votre_vue_django_pour_transcrire/',  // Endpoint pour la transcription
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
-               
+                alert('Nom du job: ' + response.job_name);
+                checkTranscribeStatusAndFetchTranscription(response.job_name);
             },
             error: function(xhr, status, error) {
-                console.error("Erreur lors de la vérification du statut:", error);
-                // Gérer l'erreur (par exemple, afficher un message d'erreur à l'utilisateur)
+                console.error(xhr.responseText);
+            },
+            complete: function() {
+                $("#process-transcribe").hide();
+                $("#text-transcribe").show();
             }
         });
+    });
 
-         $("#process-generate").hide();
-         $("#text-generate").show();
-});
+    function checkTranscribeStatusAndFetchTranscription(jobName) {
+        function checkStatus() {
+            $.ajax({
+                url: '/votre_vue_django_pour_verifier_statut/',  // Endpoint pour vérifier le statut de la transcription
+                type: 'POST',
+                data: { job_name: jobName },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'COMPLETED') {
+                        $(".transcriptions").html(response.result);
+                        $("#transcription-to-process").val(response.result);
+                    } else {
+                        setTimeout(checkStatus, 1000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erreur lors de la vérification du statut:", error);
+                }
+            });
+        }
+        checkStatus();
+    }
 
+    $("#generate_compte_rendu").click(function() {
+        $("#process-generate").show();
+        $("#text-generate").hide();
 
+        var textToProcess = $("#transcription-to-process").val();
 
-
-
-
-
-
-   
+        $.ajax({
+            url: '/votre_vue_django_pour_generer_compte_rendu/',  // Endpoint pour générer le compte rendu
+            type: 'POST',
+            data: { textToProcess: textToProcess },
+            dataType: 'json',
+            success: function(response) {
+                // Gérer la réponse, par exemple :
+                $(".transcriptions").html(response.compte_rendu_html);
+            },
+            error: function(xhr, status, error) {
+                console.error("Erreur lors de la génération du compte rendu:", error);
+            },
+            complete: function() {
+                $("#process-generate").hide();
+                $("#text-generate").show();
+            }
+        });
+    });
 </script>
 
 </body>

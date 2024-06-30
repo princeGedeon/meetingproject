@@ -9,13 +9,13 @@
             <div class="js-recommend">
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        {% if latest_meet %}
+                        {% if latest_session %}
                         <div class="swiper-slide">
                             <div class="recommend-slide">
                                 <div class="tour-slide__box">
-                                    <a href="{% url 'meet_detail' latest_meet.pk %}">
-                                        {% if latest_meet.image %}
-                                            <img src="{{ latest_meet.image.url }}" alt="{{ latest_meet.name }}">
+                                    <a href="{% url 'meet_detail_view' latest_session.pk %}">
+                                        {% if latest_session.image %}
+                                            <img src="{{ latest_session.image.url }}" alt="{{ latest_session.nom }}">
                                         {% else %}
                                             <img src="{% static 'assets/img/default-image.jpg' %}" alt="Default Image">
                                         {% endif %}
@@ -25,14 +25,12 @@
                         </div>
                         {% else %}
                         <div class="swiper-slide">
-                            <p>No latest meeting found.</p>
+                            <p>No latest session found.</p>
                         </div>
                         {% endif %}
                     </div>
-                    <div class="swipper-nav">
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    </div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                     <div class="swiper-pagination"></div>
                 </div>
             </div>
@@ -40,42 +38,29 @@
 
         <div class="uk-width-1-1">
             <h3 class="uk-text-lead">Session à Venir</h3>
-            <form method="GET" class="filter-form">
-                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
-                <select name="status">
-                    <option value="">All Statuses</option>
-                    <option value="upcoming" {% if status == 'upcoming' %}selected{% endif %}>Upcoming</option>
-                    <option value="completed" {% if status == 'completed' %}selected{% endif %}>Completed</option>
-                </select>
-                <select name="sort_by">
-                    <option value="start_datetime" {% if sort_by == 'start_datetime' %}selected{% endif %}>Start Date</option>
-                    <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Name</option>
-                    <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Status</option>
-                </select>
-                <button type="submit">Search</button>
-            </form>
+
 
             <div class="js-popular">
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        {% for meet in meets %}
+                        {% for session in sessions %}
                         <div class="swiper-slide">
                             <div class="game-card">
                                 <div class="game-card__box">
                                     <div class="game-card__media">
-                                        <a href="{% url 'meet_detail' meet.pk %}">
-                                            {% if meet.image %}
-                                                <img src="{{ meet.image.url }}" alt="{{ meet.name }}">
+                                        <a href="{% url 'meet_detail_view' session.pk %}">
+                                            {% if session.image %}
+                                                <img src="{{ session.image.url }}" alt="{{ session.nom }}">
                                             {% else %}
-                                                <img src="{% static 'assets/img/default-image.jpg' %}" alt="Default Image">
+                                                <img src="{% static 'assets/img/default-image.jpg' %}" alt="Image par défaut">
                                             {% endif %}
                                         </a>
                                     </div>
                                     <div class="game-card__info">
-                                        <a class="game-card__title" href="{% url 'meet_detail' meet.pk %}">{{ meet.name }}</a>
-                                        <div class="game-card__rating"><span>{{ meet.participants.count }} Participants</span></div>
+                                        <a class="game-card__title" href="{% url 'meet_detail_view' session.pk %}">{{ session.nom }}</a>
+                                        <div class="game-card__rating"><span>{{ session.participants.count }} Participants</span></div>
                                         <div class="game-card__price">
-                                            <span><i class="fa fa-calendar"></i> Début : {{ meet.start_datetime|date:"d M Y" }}</span>
+                                            <span><i class="fa fa-calendar"></i> Début : {{ session.session_debut|date:"d M Y" }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +68,7 @@
                         </div>
                         {% empty %}
                         <div class="swiper-slide">
-                            <p>No meetings found.</p>
+                            <p>Aucune session trouvée.</p>
                         </div>
                         {% endfor %}
                     </div>
