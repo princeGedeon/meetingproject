@@ -1,4 +1,11 @@
-from django.http import JsonResponse
+import os
+import uuid
+
+
+from django.contrib.messages.storage import default_storage
+from django.core.files.base import ContentFile
+
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ParticipantForm
 from .models import Session
@@ -254,3 +261,52 @@ def create_session_view(request):
     else:
         form = SessionForm()
     return render(request, 'addmeet.html', {'form': form})
+
+
+@csrf_exempt
+def transcribe_view(request):
+    if request.method == 'POST' and request.FILES.get('audio_file'):
+        audio_file = request.FILES['audio_file']
+
+        try:
+            # Save the uploaded audio file to a temporary location
+            file_path = default_storage.save('tmp/' + audio_file.name, ContentFile(audio_file.read()))
+
+            # Load the Whisper model and perform transcription
+            model =" whisper.load_model('base')"
+            result = model.transcribe(file_path)
+
+            # Store the transcription result
+            transcription_result = result['text']
+            transcription_id = str(uuid.uuid4())
+
+            # Delete the temporary file
+            os.remove(file_path)
+
+            # Return the transcription result and a unique identifier
+            return JsonResponse({'transcription_id': transcription_id, 'transcription': transcription_result})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+    return JsonResponse({'error': 'POST method with audio_file required'})
+
+
+@csrf_exempt
+def generate_summary_view(request):
+    if request.method == 'POST' and request.POST.get('transcription'):
+        transcription = request.POST['transcription']
+        # Here you would add logic to generate the summary
+        summary = f"Summary of the transcription: {transcription[:200]}..."  # Mock summary
+        return JsonResponse({'summary': summary})
+
+    return JsonResponse({'error': 'POST method with transcription required'})
+
+
+def download_transcription(request, transcription_id):
+    # Here we would normally fetch the transcription from the database or cache
+    # For simplicity, we are assuming the transcription is passed directly in the URL
+    transcription = request.GET.get('transcription', 'No transcription found.')
+
+    response = HttpResponse(transcription, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="transcription_{transcription_id}.txt"'
+    return response

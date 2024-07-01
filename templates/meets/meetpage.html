@@ -6,7 +6,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <title>{{ meet.nom }}</title>  <!-- Utilisation de meet.nom au lieu de meet.name -->
 
     <style>
@@ -144,6 +143,9 @@
             <div class="transcriptions" style="overflow-y: scroll; height: calc(100% - 20px);">
                 <!-- Transcription items will be dynamically added here -->
             </div>
+            <div class="text-center mt-3">
+                <a href="#" class="btn btn-primary" id="download-transcription" download>Télécharger Transcription</a>
+            </div>
         </div>
     </div>
 </div>
@@ -169,13 +171,18 @@
 
         $.ajax({
             type: 'POST',
-            url: '/votre_vue_django_pour_transcrire/',  // Endpoint pour la transcription
+            url: '/transcribe/',
             data: formData,
             processData: false,
             contentType: false,
             success: function(response) {
-                alert('Nom du job: ' + response.job_name);
-                checkTranscribeStatusAndFetchTranscription(response.job_name);
+                if (response.transcription) {
+                    $(".transcriptions").html(response.transcription);
+                    $("#transcription-to-process").val(response.transcription);
+                    $("#download-transcription").attr("href", `/download/${response.transcription_id}/?transcription=${encodeURIComponent(response.transcription)}`);
+                } else if (response.error) {
+                    console.error(response.error);
+                }
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
@@ -187,29 +194,6 @@
         });
     });
 
-    function checkTranscribeStatusAndFetchTranscription(jobName) {
-        function checkStatus() {
-            $.ajax({
-                url: '/votre_vue_django_pour_verifier_statut/',  // Endpoint pour vérifier le statut de la transcription
-                type: 'POST',
-                data: { job_name: jobName },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'COMPLETED') {
-                        $(".transcriptions").html(response.result);
-                        $("#transcription-to-process").val(response.result);
-                    } else {
-                        setTimeout(checkStatus, 1000);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Erreur lors de la vérification du statut:", error);
-                }
-            });
-        }
-        checkStatus();
-    }
-
     $("#generate_compte_rendu").click(function() {
         $("#process-generate").show();
         $("#text-generate").hide();
@@ -217,16 +201,19 @@
         var textToProcess = $("#transcription-to-process").val();
 
         $.ajax({
-            url: '/votre_vue_django_pour_generer_compte_rendu/',  // Endpoint pour générer le compte rendu
+            url: '/generate_summary/',
             type: 'POST',
-            data: { textToProcess: textToProcess },
+            data: { transcription: textToProcess },
             dataType: 'json',
             success: function(response) {
-                // Gérer la réponse, par exemple :
-                $(".transcriptions").html(response.compte_rendu_html);
+                if (response.summary) {
+                    $(".transcriptions").html(response.summary);
+                } else if (response.error) {
+                    console.error(response.error);
+                }
             },
             error: function(xhr, status, error) {
-                console.error("Erreur lors de la génération du compte rendu:", error);
+                console.error("Error generating summary:", error);
             },
             complete: function() {
                 $("#process-generate").hide();
