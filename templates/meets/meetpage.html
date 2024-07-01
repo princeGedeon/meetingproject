@@ -152,17 +152,22 @@
 
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function chooseFile() {
+        console.log("chooseFile() called");
         document.getElementById('fileInput').click();
     }
 
     function displayFileName() {
+        console.log("displayFileName() called");
         const fileName = document.getElementById('fileInput').files[0].name;
+        console.log("Selected file name:", fileName);
         document.getElementById('fileNameDisplay').innerText = fileName;
     }
 
     $("#transcribe").click(function() {
+        console.log("Transcribe button clicked");
         $("#process-transcribe").show();
         $("#text-transcribe").hide();
 
@@ -176,6 +181,7 @@
             processData: false,
             contentType: false,
             success: function(response) {
+                console.log("Transcription successful:", response);
                 if (response.transcription) {
                     $(".transcriptions").html(response.transcription);
                     $("#transcription-to-process").val(response.transcription);
@@ -185,54 +191,16 @@
                 $("#text-transcribe").show();
             },
             error: function(error) {
+                console.log("Error during transcription:", error);
                 alert('Erreur lors de la transcription. Veuillez réessayer.');
-                console.log(error);
                 $("#process-transcribe").hide();
                 $("#text-transcribe").show();
             }
         });
     });
 
-    $("#generate_compte_rendu").click(function() {
-        $("#process-generate").show();
-        $("#text-generate").hide();
+    // Ajoutez les autres événements JavaScript ici, comme pour le bouton "Générer un Compte Rendu"
 
-        var formData = new FormData();
-        formData.append('transcription_text', $("#transcription-to-process").val());
-
-        $.ajax({
-            type: 'POST',
-            url: '/generate_compte_rendu/',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.summary) {
-                    $(".transcriptions").html(response.summary);
-                    $("#transcription-to-process").val(response.summary);
-                }
-                $("#process-generate").hide();
-                $("#text-generate").show();
-            },
-            error: function(error) {
-                alert('Erreur lors de la génération du compte rendu. Veuillez réessayer.');
-                console.log(error);
-                $("#process-generate").hide();
-                $("#text-generate").show();
-            }
-        });
-    });
-
-    $("#download-transcription").click(function(e) {
-        e.preventDefault();
-        const doc = new jsPDF();
-
-        doc.fromHTML($('.transcriptions').html(), 15, 15, {
-            'width': 170,
-        });
-
-        doc.save('transcription.pdf');
-    });
 </script>
 
 </body>

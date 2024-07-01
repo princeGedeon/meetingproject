@@ -264,44 +264,47 @@ def create_session_view(request):
     return render(request, 'addmeet.html', {'form': form})
 
 
+
+# Vue pour la transcription asynchrone
 @csrf_exempt
-def transcribe_view(request):
+async def transcribe_view(request):
     if request.method == 'POST' and request.FILES.get('audio_file'):
         audio_file = request.FILES['audio_file']
 
         try:
-            # Save the uploaded audio file to a temporary location
+            # Sauvegarde du fichier audio téléchargé dans un emplacement temporaire
             file_path = default_storage.save('tmp/' + audio_file.name, ContentFile(audio_file.read()))
 
-            # Load the Whisper model and perform transcription asynchronously
-            transcription_result, transcription_id = transcribe_audio(file_path)
+            # Chargement du modèle Whisper et transcription de manière asynchrone
+            transcription_result, transcription_id = await transcribe_audio(file_path)
 
-            # Delete the temporary file
+            # Suppression du fichier temporaire après la transcription
             os.remove(file_path)
 
-            # Return the transcription result and a unique identifier
+            # Retourne le résultat de la transcription et un identifiant unique
             return JsonResponse({'transcription_id': transcription_id, 'transcription': transcription_result})
         except Exception as e:
             return JsonResponse({'error': str(e)})
 
     return JsonResponse({'error': 'POST method with audio_file required'})
 
-
+# Fonction pour la transcription asynchrone
 async def transcribe_audio(file_path):
     try:
-        # Load the Whisper model (this could be moved outside the function if it needs to be reused)
+        # Chargement du modèle Whisper (peut être placé en dehors de la fonction si nécessaire)
         model = whisper.load_model('base')
 
-        # Perform transcription
+        # Effectue la transcription
         result = await model.transcribe(file_path)
 
-        # Store the transcription result
+        # Stocke le résultat de la transcription
         transcription_result = result['text']
         transcription_id = str(uuid.uuid4())
 
         return transcription_result, transcription_id
     except Exception as e:
         raise e
+
 
 
 @csrf_exempt
