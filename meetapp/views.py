@@ -253,4 +253,4 @@ def create_session_view(request):
             return redirect('home')  # Rediriger vers la page d'accueil après la création
     else:
         form = SessionForm()
-    return render(request, 'create_session.html', {'form': form})
+    return render(request, 'addmeet.html', {'form': form})
