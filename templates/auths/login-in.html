@@ -10,9 +10,9 @@
     <meta name="HandheldFriendly" content="true">
     <meta name="format-detection" content="telephone=no">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/libs.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="shortcut icon" href="{% static 'img/favicon.png'%}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/libs.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
 
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
         <main class="page-first-screen">
             <div class="uk-grid uk-grid-small uk-child-width-1-2@s uk-flex-middle uk-width-1-1" data-uk-grid>
                 <div class="logo-big">
-                    <img src="assets/img/logo-big.png" alt="logo" class="animation-navspinv">
+                    <img src="{% static 'img/logo-big.png" alt="logo" class="animation-navspinv">
                    <span>MeetMate</span>
                     <h1>Rejoignez Nos Pour Générer Facilement Des Comptes Rendu</h1>
                 </div>
@@ -61,9 +61,9 @@
                     <div class="form-login">
                         <div class="form-login__social">
                             <ul class="social">
-                                <li><a href="http://www.google.com"><img src="assets/img/google.svg" alt="google"></a></li>
-                                <li><a href="http://www.facebook.com"><img src="assets/img/facebook.svg" alt="facebook"></a></li>
-                                <li><a href="http://www.twitter.com"><img src="assets/img/twitter.svg" alt="twitter"></a></li>
+                                <li><a href="http://www.google.com"><img src="{% static 'img/google.svg" alt="google"></a></li>
+                                <li><a href="http://www.facebook.com"><img src="{% static 'img/facebook.svg" alt="facebook"></a></li>
+                                <li><a href="http://www.twitter.com"><img src="{% static 'img/twitter.svg" alt="twitter"></a></li>
                             </ul>
                         </div>
                         <div class="form-login__box">
@@ -83,8 +83,8 @@
         </main>
     </div>
 
-    <script src="assets/js/libs.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="{% static 'js/libs.js"></script>
+    <script src="{% static 'js/main.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- create_session.html -->
+
+<main class="page-main">
+    <div class="widjet --filters">
+        <div class="widjet__head">
+            <h3 class="uk-text-lead">Ajouter une session</h3>
+        </div>
+    </div>
+    <div class="uk-grid uk-child-width-6-6@xl uk-child-width-6-6@l uk-child-width-6-6@s uk-flex-middle uk-grid-small" data-uk-grid>
+        <div class="form-login-1" style="width:100% !important; border-radius: 25px; background: #ffffff; box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03); padding: 20px;">
+            <div class="form-login__box">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="uk-margin">{{ form.nom.label_tag }}{{ form.nom }}</div>
+                    <div class="uk-margin">{{ form.description.label_tag }}{{ form.description }}</div>
+                    <div class="uk-margin">{{ form.session_debut.label_tag }}{{ form.session_debut }}</div>
+                    <div class="uk-margin">{{ form.session_fin.label_tag }}{{ form.session_fin }}</div>
+                    <div class="uk-margin">{{ form.image.label_tag }}{{ form.image }}</div>
+
+                    <div class="uk-margin"><button type="submit" class="uk-button uk-button-danger uk-width-1-1">Ajouter</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

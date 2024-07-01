@@ -239,3 +239,18 @@ def generate_summary_view(request):
         return JsonResponse({'summary': summary})
 
     return JsonResponse({'error': 'POST method with textToProcess required'})
+
+# views.py
+
+from django.shortcuts import render, redirect
+from .forms import SessionForm
+
+def create_session_view(request):
+    if request.method == 'POST':
+        form = SessionForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Rediriger vers la page d'accueil après la création
+    else:
+        form = SessionForm()
+    return render(request, 'create_session.html', {'form': form})
