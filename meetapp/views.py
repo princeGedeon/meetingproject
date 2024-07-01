@@ -1,7 +1,8 @@
 import os
 import uuid
 
-
+import whisper
+from django.contrib.auth.decorators import login_required
 from django.contrib.messages.storage import default_storage
 from django.core.files.base import ContentFile
 
@@ -83,7 +84,7 @@ def check_transcription_job_status(job_name):
     # Implémentez la logique appropriée selon votre service de transcription
     return "COMPLETED"  # Exemple simplifié
 
-
+@login_required
 def home(request):
     query = request.GET.get('q')
     status = request.GET.get('status')
@@ -272,13 +273,8 @@ def transcribe_view(request):
             # Save the uploaded audio file to a temporary location
             file_path = default_storage.save('tmp/' + audio_file.name, ContentFile(audio_file.read()))
 
-            # Load the Whisper model and perform transcription
-            model =" whisper.load_model('base')"
-            result = model.transcribe(file_path)
-
-            # Store the transcription result
-            transcription_result = result['text']
-            transcription_id = str(uuid.uuid4())
+            # Load the Whisper model and perform transcription asynchronously
+            transcription_result, transcription_id = transcribe_audio(file_path)
 
             # Delete the temporary file
             os.remove(file_path)
@@ -289,6 +285,23 @@ def transcribe_view(request):
             return JsonResponse({'error': str(e)})
 
     return JsonResponse({'error': 'POST method with audio_file required'})
+
+
+async def transcribe_audio(file_path):
+    try:
+        # Load the Whisper model (this could be moved outside the function if it needs to be reused)
+        model = whisper.load_model('base')
+
+        # Perform transcription
+        result = await model.transcribe(file_path)
+
+        # Store the transcription result
+        transcription_result = result['text']
+        transcription_id = str(uuid.uuid4())
+
+        return transcription_result, transcription_id
+    except Exception as e:
+        raise e
 
 
 @csrf_exempt
@@ -310,3 +323,22 @@ def download_transcription(request, transcription_id):
     response = HttpResponse(transcription, content_type='text/plain')
     response['Content-Disposition'] = f'attachment; filename="transcription_{transcription_id}.txt"'
     return response
+
+
+# views.py
+
+
+
+def add_participant(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+
+    if request.method == 'POST':
+        form = ParticipantForm(request.POST)
+        if form.is_valid():
+            participant = form.save()
+            session.participants.add(participant)
+            return redirect('session_detail', session_id=session.id)
+    else:
+        form = ParticipantForm()
+
+    return render(request, 'add_participant.html', {'form': form, 'session': session})

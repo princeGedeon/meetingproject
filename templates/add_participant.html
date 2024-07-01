@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="page-main">
+    <div class="widjet --filters">
+        <div class="widjet__head">
+            <h3 class="uk-text-lead">Ajouter un Participant</h3>
+        </div>
+    </div>
+    <div class="uk-grid uk-child-width-6-6@xl uk-child-width-6-6@l uk-child-width-6-6@s uk-flex-middle uk-grid-small" data-uk-grid>
+        <div class="form-login-1" style="width:100% !important; border-radius: 25px; background: #ffffff; box-shadow: 0px 30px 70px rgba(0, 0, 0, 0.03); padding: 20px;">
+            <div class="form-login__box">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="uk-margin">
+                        <label for="id_nom">Nom:</label>
+                        <input type="text" name="nom" id="id_nom" class="uk-input" required>
+                    </div>
+                    <div class="uk-margin">
+                        <label for="id_prenom">Prénom:</label>
+                        <input type="text" name="prenom" id="id_prenom" class="uk-input" required>
+                    </div>
+                    <div class="uk-margin">
+                        <label for="id_profession">Profession:</label>
+                        <input type="text" name="profession" id="id_profession" class="uk-input" required>
+                    </div>
+                    <div class="uk-margin">
+                        <label for="id_email">Email:</label>
+                        <input type="email" name="email" id="id_email" class="uk-input" required>
+                    </div>
+                    <div class="uk-margin">
+                        <label for="id_role">Rôle:</label>
+                        <input type="text" name="role" id="id_role" class="uk-input" required>
+                    </div>
+                    <input type="hidden" name="session_id" value="{{ session_id }}">
+                    <div class="uk-margin"><button type="submit" class="uk-button uk-button-danger uk-width-1-1">Ajouter</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -68,14 +68,13 @@
                 <div class="page-header__content">
                     <div class="page-header__search">
                         <div class="search">
-                            <div class="search__input"><i class="ico_search"></i><input type="search" name="search" placeholder="Rechercher Une Réunion"></div>
 
                         </div>
                     </div>
                     <div class="page-header__action">
-                        <a class="action-btn" href="#"><i class="ico_message"></i><span class="animation-ripple-delay1"></span></a>
-                        <a class="action-btn" href="#"><i class="ico_notification"></i><span class="animation-ripple-delay2"></span></a>
-                        <a class="profile" href="profile.html"> <i class="fa fa-user fa-2x " style="color: #646464 !important;"> </i> </a>
+
+                        <a style="background-color: red" class="action-btn" href="{% url 'logout'%}"><i class="ico_quit">O</i><span class="animation-ripple-delay2"></span></a>
+                           <a class="profile" href="{% url 'profile' %}"> <i class="fa fa-user fa-2x " style="color: #646464 !important;"> </i> </a>
                     </div>
                 </div>
             </div>

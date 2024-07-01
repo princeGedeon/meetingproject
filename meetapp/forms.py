@@ -43,3 +43,12 @@ class SessionForm(forms.ModelForm):
             'session_debut': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'session_fin': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
+# forms.py
+
+
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = ['nom', 'prenom', 'profession', 'email', 'role']
